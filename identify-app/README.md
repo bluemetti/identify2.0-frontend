@@ -1,5 +1,35 @@
 # React + Vite
 
+## Integração com o backend
+
+O frontend envia cada imagem original, uma por vez, para `POST /api/analyze`.
+Configure a URL do backend no arquivo `.env`:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+Para iniciar o backend localmente:
+
+```bash
+cd ../identify2.0-backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Em outro terminal, inicie o frontend:
+
+```bash
+cd identify-app
+npm run dev
+```
+
+O backend também pode ser iniciado em modo mock, sem carregar o modelo,
+definindo `AGAVE_MOCK=1` antes do comando `uvicorn`. A API atual detecta
+agaves, mas ainda não classifica plantas como saudáveis ou acometidas.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:

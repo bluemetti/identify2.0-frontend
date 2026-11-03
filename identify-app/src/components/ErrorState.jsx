@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 
-export default function ErrorState({ onRetry }) {
+export default function ErrorState({ onRetry, message }) {
   return (
     <div className="flex flex-col items-center text-center animate-fade-in">
       {/* Ícone de Alerta */}
@@ -14,7 +14,7 @@ export default function ErrorState({ onRetry }) {
         Erro na análise
       </h2>
       <p className="text-gray-500 text-sm mb-8 max-w-xs leading-relaxed">
-        Não foi possível processar esta imagem. Por favor, tente novamente.
+        {message || 'Não foi possível processar esta imagem. Por favor, tente novamente.'}
       </p>
 
       {/* Botão de tentar novamente */}

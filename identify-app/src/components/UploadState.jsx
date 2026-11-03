@@ -9,10 +9,11 @@ export default function UploadState({ onFileSelect }) {
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
-    if (file && onFileSelect) {
-      onFileSelect(file);
+    const files = Array.from(event.target.files || []);
+    if (files.length > 0 && onFileSelect) {
+      onFileSelect(files);
     }
+    event.target.value = '';
   };
 
   return (
@@ -23,6 +24,7 @@ export default function UploadState({ onFileSelect }) {
         ref={fileInputRef}
         onChange={handleFileChange}
         accept="image/*"
+        multiple
         className="hidden"
       />
 
@@ -36,7 +38,7 @@ export default function UploadState({ onFileSelect }) {
         Fazer upload de foto
       </h2>
       <p className="text-gray-500 text-sm mb-8 max-w-xs">
-        Selecione uma imagem para ser analisada pela nossa IA.
+        Selecione uma ou mais imagens para serem analisadas pela nossa IA.
       </p>
 
       {/* Botão de ação */}
@@ -45,7 +47,7 @@ export default function UploadState({ onFileSelect }) {
         onClick={handleButtonClick}
         className="bg-zinc-900 hover:bg-black text-white text-sm font-semibold px-8 py-3 rounded-full transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
       >
-        Escolher arquivo
+        Escolher imagens
       </button>
     </div>
   );
