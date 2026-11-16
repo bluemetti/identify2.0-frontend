@@ -95,13 +95,6 @@ function ResultadoImagem({ result, index, total, onPreview }) {
         </section>
       </div>
 
-      <p className="mx-auto mt-4 max-w-xl text-center text-xs leading-relaxed text-gray-500">
-        {!saudeAtiva
-          ? 'O modelo detecta a presença de agaves, mas a classificação de saúde está desligada no servidor.'
-          : suspeitas > 0
-            ? 'As caixas vermelhas marcam as plantas com suspeita de doença, com a probabilidade estimada pelo modelo (de 0 a 1). É uma triagem: confirme em campo antes de qualquer decisão.'
-            : 'Nenhuma planta com suspeita de doença nesta imagem. É uma triagem automática: na dúvida, confira em campo.'}
-      </p>
       {result?.avisos?.length > 0 && (
         <div className="mt-4 w-full rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm text-amber-800">
           {result.avisos.map((aviso) => <p key={aviso}>{aviso}</p>)}
@@ -179,6 +172,12 @@ export default function LoadingState({
           <h2 className="text-xl font-bold text-gray-900 mb-2">Identificação concluída</h2>
           <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
             {`Confira os resultados de ${results.length} ${results.length === 1 ? 'imagem' : 'imagens'}.`}
+          </p>
+          {/* Explicacao da triagem: uma vez so, valendo para todas as fotos */}
+          <p className="mt-3 max-w-xl text-xs leading-relaxed text-gray-500">
+            {results.some((item) => item?.saude_ativa === true)
+              ? 'As caixas vermelhas marcam as plantas com suspeita de doença, com a probabilidade estimada pelo modelo (de 0 a 1). É uma triagem: confirme em campo antes de qualquer decisão.'
+              : 'O modelo detecta a presença de agaves, mas a classificação de saúde está desligada no servidor.'}
           </p>
           {results.length > 1 && (
             <button
