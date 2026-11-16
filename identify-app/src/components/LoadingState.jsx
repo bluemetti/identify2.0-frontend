@@ -4,6 +4,8 @@ import exampleBoxes from '../exemplo_caixas.jpg';
 
 const nomeDownload = (result) => `agaves_${result?.filename || 'identificadas.jpg'}`;
 
+// O image_data do backend é um data-URI (a imagem inteira em base64), então
+// serve direto como link de download, sem nova requisição ao servidor.
 function baixarImagem(href, nome) {
   const link = document.createElement('a');
   link.href = href;

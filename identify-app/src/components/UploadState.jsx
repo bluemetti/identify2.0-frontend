@@ -8,17 +8,20 @@ export default function UploadState({ onFileSelect }) {
     fileInputRef.current?.click();
   };
 
+  // Os arquivos vão para o backend como estão: não redimensione nem comprima
+  // aqui. O modelo precisa da foto original do drone (5472x3078); reduzida,
+  // a detecção cai pela metade sem dar erro.
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files || []);
     if (files.length > 0 && onFileSelect) {
       onFileSelect(files);
     }
+    // Limpa o input para que escolher o mesmo arquivo de novo dispare o onChange.
     event.target.value = '';
   };
 
   return (
     <div className="flex flex-col items-center text-center animate-fade-in">
-      {/* Input invisível para seleção de arquivo */}
       <input
         type="file"
         ref={fileInputRef}
@@ -28,12 +31,10 @@ export default function UploadState({ onFileSelect }) {
         className="hidden"
       />
 
-      {/* Ícone de Upload */}
       <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-6">
         <Upload className="w-7 h-7 text-gray-600" strokeWidth={1.8} />
       </div>
 
-      {/* Texto explicativo */}
       <h2 className="text-xl font-bold text-gray-900 mb-2">
         Fazer upload de foto
       </h2>
@@ -41,7 +42,6 @@ export default function UploadState({ onFileSelect }) {
         Selecione uma ou mais imagens para serem analisadas pela nossa IA.
       </p>
 
-      {/* Botão de ação */}
       <button
         type="button"
         onClick={handleButtonClick}

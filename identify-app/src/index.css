@@ -1,7 +1,10 @@
+/* Estas diretivas nao tem efeito: nao ha PostCSS/Tailwind configurado no
+   build. O Tailwind vem do script de CDN em index.html. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Animacao de entrada das telas (classe animate-fade-in). */
 @keyframes fadeIn {
   from {
     opacity: 0;
