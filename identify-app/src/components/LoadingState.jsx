@@ -14,6 +14,10 @@ export default function LoadingState({
   const previewRef = React.useRef(null);
   const result = results[selectedResult];
   const imageSource = result?.image_data || exampleBoxes;
+  // saude_ativa=false quando o backend roda so com deteccao (AGAVE_SAUDE=0):
+  // nesse caso nao ha classificacao e os campos de saude vem null.
+  const saudeAtiva = result?.saude_ativa === true;
+  const suspeitas = saudeAtiva ? result.doentes : null;
 
   useEffect(() => {
     if (!isPreviewOpen) {
@@ -98,19 +102,32 @@ export default function LoadingState({
                   <dd className="text-lg font-bold text-gray-900">{result?.total_agaves ?? 0}</dd>
                 </div>
                 <div className="flex items-center justify-between gap-3 px-4 py-3">
-                  <dt className="text-xs leading-tight text-gray-500">Saudáveis</dt>
-                  <dd className="text-sm font-semibold text-gray-500">Não informado</dd>
+                  <dt className="text-xs leading-tight text-gray-500">Sem suspeita</dt>
+                  {saudeAtiva ? (
+                    <dd className="text-lg font-bold text-gray-900">{result.sadias}</dd>
+                  ) : (
+                    <dd className="text-sm font-semibold text-gray-500">Não informado</dd>
+                  )}
                 </div>
                 <div className="flex items-center justify-between gap-3 px-4 py-3">
-                  <dt className="text-xs leading-tight text-gray-500">Acometidas</dt>
-                  <dd className="text-sm font-semibold text-gray-500">Não informado</dd>
+                  <dt className="text-xs leading-tight text-gray-500">Com suspeita de doença</dt>
+                  {saudeAtiva ? (
+                    <dd className={`text-lg font-bold ${suspeitas > 0 ? 'text-red-600' : 'text-gray-900'}`}>
+                      {suspeitas}
+                    </dd>
+                  ) : (
+                    <dd className="text-sm font-semibold text-gray-500">Não informado</dd>
+                  )}
                 </div>
               </dl>
             </section>
           </div>
           <p className="mb-4 max-w-xl text-xs leading-relaxed text-gray-500">
-            O modelo atual detecta a presença de agaves, mas ainda não classifica
-            plantas como saudáveis ou acometidas.
+            {!saudeAtiva
+              ? 'O modelo detecta a presença de agaves, mas a classificação de saúde está desligada no servidor.'
+              : suspeitas > 0
+                ? 'As caixas vermelhas marcam as plantas com suspeita de doença, com a probabilidade estimada pelo modelo (de 0 a 1). É uma triagem: confirme em campo antes de qualquer decisão.'
+                : 'Nenhuma planta com suspeita de doença nesta imagem. É uma triagem automática: na dúvida, confira em campo.'}
           </p>
           {result?.avisos?.length > 0 && (
             <div className="mb-4 w-full rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm text-amber-800">
@@ -131,6 +148,14 @@ export default function LoadingState({
                   }`}
                 >
                   {index + 1}. {item.filename}
+                  {item.saude_ativa && item.doentes > 0 && (
+                    <span
+                      className={`ml-1.5 ${selectedResult === index ? 'text-red-300' : 'text-red-600'}`}
+                      title={`${item.doentes} com suspeita de doença`}
+                    >
+                      • {item.doentes}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
@@ -156,7 +181,7 @@ export default function LoadingState({
       <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
         {isComplete
           ? `Confira os resultados de ${results.length} imagem${results.length === 1 ? '' : 'ns'}.`
-          : `Processando imagem ${progress?.current || 1} de ${progress?.total || 1}. Cada imagem pode levar cerca de 11 segundos.`}
+          : `Processando imagem ${progress?.current || 1} de ${progress?.total || 1}. Cada imagem pode levar cerca de 13 segundos.`}
       </p>
 
       {isPreviewOpen && (
