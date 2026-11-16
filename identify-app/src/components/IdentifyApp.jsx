@@ -7,7 +7,10 @@ import HelpButton from './HelpButton';
 
 // Endereço do backend. Vem do .env (VITE_API_URL) e é fixado no momento do
 // build pelo Vite: mudar o .env exige reiniciar o `npm run dev` ou refazer o build.
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Sem a variável, usa o backend local (http://localhost:8000). Com
+// VITE_API_URL="" (vazio), chama a API no MESMO endereço da página
+// (/api/analyze): é o modo do Docker, em que o nginx repassa /api ao backend.
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 export default function IdentifyApp() {
   // 'upload' | 'loading' | 'result' | 'error'
