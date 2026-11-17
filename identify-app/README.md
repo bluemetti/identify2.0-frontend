@@ -27,8 +27,13 @@ npm run dev
 ```
 
 O backend também pode ser iniciado em modo mock, sem carregar o modelo,
-definindo `AGAVE_MOCK=1` antes do comando `uvicorn`. A API atual detecta
-agaves, mas ainda não classifica plantas como saudáveis ou acometidas.
+definindo `AGAVE_MOCK=1` antes do comando `uvicorn`.
+
+A API detecta as agaves e faz a triagem de saúde: a resposta traz `doentes`
+(plantas com suspeita de doença), `sadias`, `taxa_doenca` e a lista `plantas`,
+ordenada da mais suspeita para a menos. A imagem devolvida marca só as plantas
+com suspeita. É triagem, não diagnóstico: o texto da tela pede conferência em
+campo. Contrato completo no `API.md` do backend.
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
